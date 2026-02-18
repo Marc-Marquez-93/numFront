@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
-import { Quasar } from 'quasar'
 import { createPinia } from 'pinia'
+// import router from "./routes/routes.js"
+import { Quasar, Dialog, Notify, Screen, LocalStorage, SessionStorage } from 'quasar'
 
 import '@quasar/extras/material-icons/material-icons.css'
 
@@ -21,6 +22,8 @@ myApp.use(Quasar, {
     SessionStorage
   }, 
 })
+
+// myApp.use(router)
 
 myApp.use(pinia)
 

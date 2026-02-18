@@ -1,3 +1,14 @@
 body{
     font-family: 'Courier New', Courier, monospace;
 }
+
+#dad{
+    width:50%;
+    height: auto;
+    background-color: antiquewhite;
+    align-self: center;
+    justify-self: center;
+    gap: 10px;
+    padding: 5px;
+    justify-items: center;
+}
