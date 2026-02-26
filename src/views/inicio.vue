@@ -1,15 +1,16 @@
 <script setup>
 import { ref } from 'vue';
-import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import { postData } from '../services/apiCliente.js';
-
-const $q = useQuasar();
-const router = useRouter();
-
-// Modificamos variables CSS de Quasar directamente para que los componentes usen los colores de la marca
 import { setCssVar } from 'quasar';
+import { useNotifications } from '../composables/useNotify.js'; // Importamos tu composable
+
+// Configuramos el color de Quasar
 setCssVar('primary', '#13ec5b');
+
+const router = useRouter();
+// Instanciamos los métodos de notificación
+const { success, error } = useNotifications();
 
 const form = ref({
   nombre: '',
@@ -26,24 +27,22 @@ const iconos = [
 
 async function registrarUsuario() {
   try {
-    await postData('usuario', form.value);
+    const payload = {
+      ...form.value,
+      rol: 0 
+    };
+
+    const res = await postData('', payload); 
     
-    $q.notify({
-      color: 'primary',
-      textColor: 'dark',
-      message: '¡Bienvenido a la comunidad! Inicia sesión para continuar.',
-      icon: 'spa',
-      position: 'top-right'
-    });
+    console.log(res);
+  
+    success('¡Bienvenido a la comunidad!', 'Inicia sesión para continuar.');
     
     router.push('/login');
-  } catch (error) {
-    $q.notify({
-      color: 'negative',
-      message: error.response?.data?.errors?.[0]?.msg || 'Error al intentar registrarte',
-      icon: 'warning',
-      position: 'top-right'
-    });
+
+  } catch (err) {
+
+console.log(err);
   }
 }
 </script>
