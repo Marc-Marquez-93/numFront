@@ -11,4 +11,4 @@
 
 </template>
 
-<style src="../styles/kkk.css"></style>
+<style></style>
