@@ -66,3 +66,35 @@
 .hover-scale:active {
     transform: scale(0.95);
 }
+
+/* --- ESTILOS PARA EL TEXTO DE LA IA --- */
+
+/* La fuente bonita para la lectura */
+.fuente-mistica {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1.15rem; /* Un poco más grande para que sea súper legible */
+  line-height: 1.8;
+  color: #3d2b1f; /* text-earth */
+}
+
+/* El estilo para lo que era ### */
+.lectura-titulo {
+  display: block; /* Para que se comporte como un bloque independiente */
+  font-family: 'Epilogue', sans-serif; /* Volvemos a la fuente moderna para los títulos */
+  font-weight: 800; /* Extra negrilla */
+  text-transform: uppercase; /* MAYÚSCULAS */
+  color: #2d4a34; /* text-moss */
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
+/* El estilo para lo que era **texto** */
+.lectura-destacado {
+  font-weight: 700;
+  color: #1a3a22; /* Un verde un poco más oscuro para que resalte en la lectura */
+}
+
+.lectura-destacado em {
+  font-style: italic;
+}

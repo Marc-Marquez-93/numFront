@@ -4,16 +4,12 @@ import { useRouter } from "vue-router";
 import { postData } from "../services/apiCliente.js";
 import { setCssVar } from "quasar";
 import { useNotifications } from "../composables/useNotify.js";
-// 1. Importamos la tienda del usuario
 import { useUsuarioStore } from "../stores/Usuario.js";
 
-// Configuramos el color de Quasar
 setCssVar("primary", "#13ec5b");
 
 const router = useRouter();
 const { success, error } = useNotifications();
-
-// 2. Instanciamos la tienda
 const usuarioStore = useUsuarioStore();
 
 const form = ref({
@@ -23,7 +19,6 @@ const form = ref({
   fecha_nacimiento: "",
 });
 
-// Referencia para controlar que el calendario se cierre correctamente
 const qDateProxy = ref(null);
 
 const iconos = [
@@ -32,7 +27,43 @@ const iconos = [
   { icon: "auto_graph", label: "Vibración" },
 ];
 
+const validarFechaFrontend = (fechaString) => {
+  if (!fechaString) return "Fecha inválida";
+  
+  const fechaEntrada = new Date(fechaString);
+  const ahora = new Date();
+  ahora.setHours(0, 0, 0, 0);
+
+  const fechaLocal = new Date(fechaEntrada.getTime() + Math.abs(fechaEntrada.getTimezoneOffset() * 60000));
+
+  if (fechaLocal > ahora) {
+    return "La fecha no puede ser mayor a la actual";
+  }
+  return null;
+};
+
 async function registrarUsuario() {
+
+  if (!form.value.nombre || form.value.nombre.trim() === "") {
+    return error("Datos incompletos", "El nombre es obligatorio");
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(form.value.email)) {
+    return error("Dato incorrecto", "Error en el email");
+  }
+
+  const passLength = form.value.password.length;
+  if (passLength < 7 || passLength > 10) {
+    return error("Dato incorrecto", "La contraseña debe tener entre 7 y 10 caracteres");
+  }
+
+  const errorFecha = validarFechaFrontend(form.value.fecha_nacimiento);
+  if (errorFecha) {
+    return error("Dato incorrecto", errorFecha);
+  }
+
+//postData
   try {
     const payload = {
       ...form.value,
@@ -42,19 +73,24 @@ async function registrarUsuario() {
     const res = await postData("/usuario", payload);
     console.log(res);
 
-    // 3. Guardamos el email en Pinia para usarlo en las siguientes vistas
+
     usuarioStore.email = res.usuario.email;
 
-    // Notificación de éxito y redirección
     success("¡Registro exitoso!", "Preparando tu lectura numerológica...");
     router.push("/lecturaPrincipal");
+
   } catch (err) {
     console.log(err);
-    // Notificación de error
-    const mensajeError =
-      err.response?.data?.message ||
-      "No se pudo completar el registro. Por favor, intenta de nuevo.";
-    error("Error en el registro", mensajeError);
+    
+    if (err.response?.data?.errors && err.response.data.errors.length > 0) {
+
+      const primerErrorBackend = err.response.data.errors[0].msg;
+      error("Error en el registro", primerErrorBackend);
+    } else {
+
+      const mensajeError = err.response?.data?.message || err.response?.data?.msg || "No se pudo completar el registro.";
+      error("Error", mensajeError);
+    }
   }
 }
 </script>
