@@ -112,7 +112,7 @@ async function registrarUsuario() {
         />
         <span
           class="text-h6 text-weight-bold text-uppercase text-moss tracking-tight"
-          >Numera</span
+          >BEAUTY SOUL</span
         >
       </div>
 
