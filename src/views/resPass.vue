@@ -316,5 +316,5 @@ const restablecerPass = async () => {
 </template>
 
 <style scoped>
-@import '../styles/respass.css';
+@import '../styles/resPass.css';
 </style>
