@@ -26,7 +26,7 @@ const generarLectura = async () => {
 
   try {
     cargando.value = true;
-    const url = `http://localhost:4500/api/lectura/principal/${usuarioStore.email}`;
+    const url = `/lectura/principal/${usuarioStore.email}`;
 
     const res = await postData(url, {});
 
