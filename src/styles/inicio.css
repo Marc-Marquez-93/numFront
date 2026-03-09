@@ -7,6 +7,13 @@
   min-height: 100vh;
   overflow-x: hidden;
   font-size: 18px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+input, textarea {
+  user-select: auto !important;
+  -webkit-user-select: auto !important;
 }
 
 /* PALETA DE COLORES PERSONALIZADA */

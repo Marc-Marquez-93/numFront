@@ -46,17 +46,49 @@ async function iniciarSesion() {
         // 4. Verificamos el estado del pago
         const emailUsuario = usuarioStore.email;
         const resPago = await axiosInstance.get(`/pago/estado/${emailUsuario}`);
-
         const estadoPago = resPago.data.estado;
+
+        // 5. Activación de la verificación auxiliar directamente en el login
+        if (estadoPago === "activo") {
+            const ahora = new Date();
+            try {
+                // Bajamos todas las lecturas
+                const resLecturas = await axiosInstance.get(`/lectura/usuario/${emailUsuario}`);
+                const lecturasData = resLecturas.data.lecturas || [];
+                
+                // Extraemos solo las diarias
+                const lecturasDiarias = lecturasData.filter(l => l.tipo === 1);
+                
+                const hoyString = ahora.toDateString();
+                
+                // Miramos si existe AL MENOS UNA que coindida con el string de 'hoy'
+                const tieneLecturaHoy = lecturasDiarias.some(l => {
+                    const dateL = new Date(l.fecha_lectura || l.createdAt);
+                    return dateL.toDateString() === hoyString;
+                });
+
+                if (!tieneLecturaHoy) {
+                    console.log("No hay lectura para hoy. Forzando generación auxiliar en login...");
+                    await postData(`/lectura/diaria/${emailUsuario}`, {});
+                    console.log("Generación exitosa.");
+                } else {
+                    console.log("La lectura diaria de hoy ya existe, saltando generación.");
+                }
+            } catch (errorAuxiliar) {
+                 // El backend aborta con 400 si ya existe
+                if (errorAuxiliar.response?.status === 400 && errorAuxiliar.response?.data?.msg?.includes("Ya tienes")) {
+                     console.log("Backend bloqueó duplicado exitosamente.");
+                } else {
+                     console.error("Fallo inesperado al asegurar la lectura diaria en login:", errorAuxiliar);
+                }
+            }
+        }
 
         success("¡Bienvenido de vuelta!", "Sincronizando tus energías...");
 
-        // 5. Redirección basada en el estado
-        if (estadoPago === "activo") {
-            router.push("/premium");
-        } else {
-            router.push("/gratis");
-        }
+        // 6. Redirección basada en el estado
+        // Redirigimos siempre al dashboard
+        router.push("/dashboard");
 
     } catch (err) {
         console.log(err);

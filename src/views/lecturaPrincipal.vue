@@ -48,7 +48,7 @@ const generarLectura = async () => {
 
 const activarMensajeDiario = async () => {
   console.log("Botón de mensaje diario presionado");
-  // Esto lo conectaremos más adelante a tu otra ruta
+  router.push('/login');
 };
 
 const volverInicio = () => {
@@ -134,7 +134,7 @@ const volverInicio = () => {
                 Suscripción Premium • Cancela cuando quieras
               </p>
             </div>
-            <span class="cursor-pointer text-earth opacity-6 hover-primary text-caption text-weight-medium" style="
+            <span @click="router.push('/login')" class="cursor-pointer text-earth opacity-6 hover-primary text-caption text-weight-medium" style="
                 text-decoration: underline;
                 text-underline-offset: 4px;
                 transition: color 0.3s;

@@ -4,6 +4,13 @@
 
 .login-container {
     font-family: 'Epilogue', sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+input, textarea {
+    user-select: auto !important;
+    -webkit-user-select: auto !important;
 }
 
 /* PALETA DE COLORES (Basado en tu Tailwind config) */

@@ -20,6 +20,7 @@ const form = ref({
 });
 
 const qDateProxy = ref(null);
+const mostrarPassword = ref(false);
 
 const iconos = [
   { icon: "self_improvement", label: "Espiritual" },
@@ -264,7 +265,7 @@ async function registrarUsuario() {
                 </div>
                 <q-input
                   v-model="form.password"
-                  type="password"
+                  :type="mostrarPassword ? 'text' : 'password'"
                   placeholder="••••••••"
                   bg-color="white"
                   color="primary"
@@ -273,7 +274,16 @@ async function registrarUsuario() {
                   dense
                   lazy-rules
                   :rules="[(val) => !!val || 'Crea una contraseña']"
-                />
+                >
+                  <template v-slot:append>
+                    <q-icon 
+                      :name="mostrarPassword ? 'visibility_off' : 'visibility'" 
+                      class="cursor-pointer"
+                      color="grey-7" 
+                      @click="mostrarPassword = !mostrarPassword" 
+                    />
+                  </template>
+                </q-input>
               </div>
               <div class="col-12 col-sm-6">
                 <div

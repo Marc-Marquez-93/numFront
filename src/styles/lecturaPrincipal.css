@@ -8,6 +8,13 @@
     background-color: #f6f8f6; /* background-light */
     color: #3d2b1f; /* earth-brown */
     min-height: 100vh;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+input, textarea {
+    user-select: auto !important;
+    -webkit-user-select: auto !important;
 }
 
 /* PALETA DE COLORES */
